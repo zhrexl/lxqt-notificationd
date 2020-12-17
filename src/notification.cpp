@@ -50,9 +50,9 @@ Notification::Notification(const QString &application,
                            const QStringList& actions, const QVariantMap& hints,
                            QWidget *parent)
     : QWidget(parent),
-      m_timer(0),
+      m_timer(nullptr),
       m_linkHovered(false),
-      m_actionWidget(0),
+      m_actionWidget(nullptr),
       m_icon(icon),
       m_timeout(timeout),
       m_actions(actions),
@@ -189,7 +189,7 @@ void Notification::setValues(const QString &application,
     }
 
     // Actions
-    if (actions.count() && m_actionWidget == 0)
+    if (actions.count() && m_actionWidget == nullptr)
     {
         if (actions.count()/2 < 4)
             m_actionWidget = new NotificationActionsButtonsWidget(actions, this);
@@ -283,19 +283,19 @@ QPixmap Notification::getPixmapFromString(const QString &str) const
     }
 }
 
-void Notification::enterEvent(QEvent * event)
+void Notification::enterEvent(QEvent * /*event*/)
 {
     if (m_timer)
         m_timer->pause();
 }
 
-void Notification::leaveEvent(QEvent * event)
+void Notification::leaveEvent(QEvent * /*event*/)
 {
     if (m_timer)
         m_timer->resume();
 }
 
-bool Notification::eventFilter(QObject *obj, QEvent *event)
+bool Notification::eventFilter(QObject * /*obj*/, QEvent * event)
 {
     // Catch mouseReleaseEvent on child labels if a link is not currently being hovered.
     //
@@ -309,7 +309,7 @@ bool Notification::eventFilter(QObject *obj, QEvent *event)
     return false;
 }
 
-void Notification::linkHovered(QString link)
+void Notification::linkHovered(const QString& link)
 {
     m_linkHovered = !link.isEmpty();
 }

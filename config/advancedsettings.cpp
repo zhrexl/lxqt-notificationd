@@ -46,9 +46,7 @@ AdvancedSettings::AdvancedSettings(LXQt::Settings* settings, QWidget *parent):
     connect(mousebtn, &QCheckBox::clicked, this, &AdvancedSettings::save);
 }
 
-AdvancedSettings::~AdvancedSettings()
-{
-}
+AdvancedSettings::~AdvancedSettings() = default;
 
 void AdvancedSettings::restoreSettings()
 {
@@ -91,7 +89,11 @@ void AdvancedSettings::save()
     QString blackList = blackListEdit->text();
     if (!blackList.isEmpty())
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(5,15,0))
+        QStringList l = blackList.split(QL1S(","), Qt::SkipEmptyParts);
+#else
         QStringList l = blackList.split(QL1S(","), QString::SkipEmptyParts);
+#endif
         l.removeDuplicates();
         mSettings->setValue(QL1S("blackList"), l);
     }
